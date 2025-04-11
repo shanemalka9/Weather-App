@@ -60,6 +60,10 @@ body {
 
 }
 
+.weather {
+    display: none;
+}
+
 .weather h1 {
     font-size: 80px;
     font-weight: 500;
@@ -93,5 +97,12 @@ body {
 .humidity, .wind {
     font-size: 28px;
     margin-top: -6px;
-    
+}
+
+.error {
+    text-align: left;
+    margin-left: 25px;
+    font-size: 14px;
+    margin-top: 10px;
+    display: none;
 }

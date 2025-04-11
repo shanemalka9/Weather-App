@@ -12,8 +12,11 @@
         <input type="text" placeholder="Enter City Name" spellcheck="false" />
         <button><img src="images/search.png" alt="search icon" /></button>
       </div>
+      <div class="error">
+        <p>Invalid City Name</p>
+      </div>
       <div class="weather">
-        <img src="images/rain.png" class="weather-icon" />
+        <img src="" class="weather-icon" />
         <h1 class="temp"></h1>
         <h2 class="city"></h2>
         <div class="details">
@@ -37,28 +40,58 @@
 
     <script>
       const apiKey = "632521e113f0926dccf8739136582f9d";
-      const apiUrl = "https://api.openweathermap.org/data/2.5/weather?units=metric&q=";
+      const apiUrl =
+        "https://api.openweathermap.org/data/2.5/weather?units=metric&q=";
       const searchBox = document.querySelector(".search input");
       const searchBtn = document.querySelector(".search button");
-      
+      const weatherIcon = document.querySelector(".weather-icon");
 
       async function checkWeather(city) {
-        const response = await fetch(apiUrl + city + `&appid=${apiKey}`)
-        let data = await response.json();
+        const response = await fetch(apiUrl + city + `&appid=${apiKey}`);
 
-        console.log(data)
+        if (response.status == 404) {
+          document.querySelector(".error").style.display = "block";
+          document.querySelector(".weather").style.display = "none";
+        } else {
+          let data = await response.json();
 
-        document.querySelector(".city").innerHTML= data.name;
-        document.querySelector(".temp").innerHTML= Math.round(data.main.temp) + " °C";
-        document.querySelector(".humidity").innerHTML= data.main.humidity + "%";
-        document.querySelector(".wind").innerHTML= data.wind.speed + " KM/H";
+          console.log(data);
+
+          document.querySelector(".city").innerHTML = data.name;
+          document.querySelector(".temp").innerHTML =
+            Math.round(data.main.temp) + "°C";
+          document.querySelector(".humidity").innerHTML =
+            data.main.humidity + "%";
+          document.querySelector(".wind").innerHTML = data.wind.speed + " KM/H";
+
+          switch (data.weather[0].main) {
+            case "Clouds":
+              weatherIcon.src = "images/clouds.png";
+              break;
+            case "Clear":
+              weatherIcon.src = "images/clear.png";
+              break;
+            case "Rain":
+              weatherIcon.src = "images/rain.png";
+              break;
+            case "Drizzle":
+              weatherIcon.src = "images/drizzle.png";
+              break;
+            case "Mist":
+              weatherIcon.src = "images/mist.png";
+              break;
+            case "Snow":
+              weatherIcon.src = "images/snow.png";
+              break;
+          }
+          document.querySelector(".error").style.display = "none";
+          document.querySelector(".weather").style.display = "block";
+        }
       }
 
-      searchBtn.addEventListener("click", ()=>{
+      searchBtn.addEventListener("click", () => {
         checkWeather(searchBox.value);
-      })
-
-      checkWeather("colombo")
+      });
     </script>
   </body>
 </html>
